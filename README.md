@@ -1,9 +1,9 @@
 
-Simple AI Tasks
+Task Manager CL
 ===============
 
 
-A simple task management tool with command-line interface, and AI features.  
+Task management in command line.  
 
 
 How It Works
@@ -179,4 +179,4 @@ Gestures
 
 Mouse scroll up/down  
 Scroll through the task list.  
-Not working on Windows.  
+(Not working on Windows.)  
