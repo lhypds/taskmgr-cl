@@ -6,6 +6,7 @@ const {
   createTask,
   markTask,
   deleteTask,
+  renameTaskByFirstLine,
   openTask,
   readTasks,
   hasSubtask
@@ -286,6 +287,7 @@ function main() {
     // temporarily leave blessed fullscreen so editor can use the terminal
     try { screen.leave(); } catch (e) { }
     spawnSync(editor, getEditorArgs(editor, taskPath), { stdio: 'inherit' });
+    renameTaskByFirstLine(taskPath);
     // re-enter blessed / alternate screen (be defensive about APIs)
     try {
       if (typeof screen.enter === 'function') screen.enter();
@@ -311,6 +313,7 @@ function main() {
       const { spawnSync } = require('child_process');
       try { screen.leave(); } catch (e) { }
       spawnSync(editor, getEditorArgs(editor, t.path), { stdio: 'inherit' });
+      renameTaskByFirstLine(t.path);
       // re-enter blessed / alternate screen (be defensive about APIs)
       try {
         if (typeof screen.enter === 'function') screen.enter();
@@ -334,6 +337,7 @@ function main() {
       const { spawnSync } = require('child_process');
       try { screen.leave(); } catch (e) { }
       spawnSync(editor, getEditorArgs(editor, t.path), { stdio: 'inherit' });
+      renameTaskByFirstLine(t.path);
       // re-enter blessed / alternate screen (be defensive about APIs)
       try {
         if (typeof screen.enter === 'function') screen.enter();

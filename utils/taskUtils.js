@@ -45,7 +45,7 @@ function readTasks(dir) {
       if (fs.existsSync(taskPath)) {
         const content = fs.readFileSync(taskPath, 'utf8');
         const parsed = parseTask(content);
-        parsed.id = id;
+        parsed.id = e.name.split(' ')[0];  // only the datetime prefix
         parsed.path = taskPath;
         tasks.push(parsed);
       }
@@ -107,8 +107,33 @@ function markTask(task, status) {
 }
 
 function deleteTask(dir, task) {
-  const taskDir = path.join(dir, task.id);
+  const taskDir = path.dirname(task.path);  // use actual path, folder may have suffix
   fs.rmSync(taskDir, { recursive: true, force: true });
+}
+
+// After creating/editing a task, rename its folder to "<id> <first detail line>".
+// Returns the new task path (or original if nothing to rename).
+function renameTaskByFirstLine(taskPath) {
+  try {
+    const content = fs.readFileSync(taskPath, 'utf8');
+    const parsed = parseTask(content);
+    const firstLine = (parsed.details || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean)[0] || '';
+    if (!firstLine) return taskPath;
+    const taskDir = path.dirname(taskPath);
+    const parentDir = path.dirname(taskDir);
+    const oldName = path.basename(taskDir);
+    // strip any existing suffix (keep only the datetime prefix)
+    const idPart = oldName.split(' ')[0];
+    // sanitize: remove characters unsafe for folder names
+    const suffix = firstLine.replace(/[\/\\:*?"<>|]/g, '').trim().slice(0, 80);
+    const newName = `${idPart} ${suffix}`;
+    if (oldName === newName) return taskPath;
+    const newDir = path.join(parentDir, newName);
+    fs.renameSync(taskDir, newDir);
+    return path.join(newDir, path.basename(taskPath));
+  } catch (e) {
+    return taskPath;
+  }
 }
 
 function openTask(task) {
@@ -128,6 +153,7 @@ module.exports = {
   saveTask,
   markTask,
   deleteTask,
+  renameTaskByFirstLine,
   openTask,
   parseTask,
   readTasks,
