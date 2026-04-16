@@ -12,7 +12,7 @@ How It Works
 The application bacically read the folders in current directory, listing all tasks.  
 Each task is a folder with a `task.txt` file inside it.  
 The folder name is the task ID, which is a timestamp in seconds.  
-After start it with `taskmgr`, it will list all tasks in current folder, and user can move between tasks.  
+After start it with `taskmgr` or `tm`, it will list all tasks in current folder, and user can move between tasks.  
 
 
 Features
