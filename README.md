@@ -32,12 +32,6 @@ Support a `vi` style keybindings, like `j`, `k`, `h`, `l` to navigate between ta
 Status bar  
 Shows the task counter, task folder path, and default text editor.  
 
-* AI Features
-
-To be implemented in the future.  
-1. Help summarize tasks and create a title.  
-2. Help create subtasks based on the task details.  
-
 
 Dependencies
 ------------
@@ -114,9 +108,9 @@ Task List
 
 Example:  
 ```
-      id         edit_at        created_at     task
-[x]  1755176512  20250814_2100  20250814_2100  Buy apple.   
-[ ]  1755176512  20250814_2100  20250814_2100  Buy orange.  
+      id           edit_at        task
+[x]  202508142100  202508142100  Buy apple.   
+[ ]  202508142100  202508142100  Buy orange.  
 ```
 
 Task status:
