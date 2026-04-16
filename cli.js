@@ -96,8 +96,7 @@ function renderList(screen, list, tasks, selected) {
     const origin = formatOriginForDisplay(t['Origin'] || t.Origin || '', 8);
 
     const last = t['Last edit at'] || t.Edit_at || '';
-    const created = t['Created at'] || t.Created_at || '';
-    return `${check}  ${t.id}  ${origin}  ${last}  ${created}  ${title}`;
+    return `${check}  ${t.id}  ${origin}  ${last}  ${title}`;
   });
   list.setItems(lines);
   list.select(selected);
@@ -138,7 +137,7 @@ function main() {
   const header = blessed.box({
     parent: screen,
     top: 0, left: 0, height: 1, width: '100%',
-    content: '     id            origin    edit_at        created_at     task'
+    content: '     id            origin    edit_at       task'
   });
 
   const selectedStyle = (process.platform === 'win32')

@@ -7,7 +7,7 @@ const TASK_FILE = 'task.txt';
 
 function parseTask(text) {
   const lines = text.split(/\r?\n/);
-  const out = { Title: '', Status: '', Labels: '', Origin: '', Created_at: '', Edit_at: '', Details: '\n' };
+  const out = { Title: '', Status: '', Labels: '', Origin: '', Edit_at: '', Details: '\n' };
   let detailsMode = false;
   const details = [];
   for (const l of lines) {
@@ -76,7 +76,7 @@ function createTask(dir, title = '', labels = '', origin = '', status = 'todo', 
   fs.mkdirSync(taskDir);
   const taskPath = path.join(taskDir, TASK_FILE);
   const now = formatDate(new Date());
-  const template = `Title: ${title}\nStatus: ${status}\nLabels: ${labels}\nOrigin: ${origin}\nCreated at: ${now}\nLast edit at: ${now}\nDetails:\n${details}\n`;
+  const template = `Title: ${title}\nStatus: ${status}\nLabels: ${labels}\nOrigin: ${origin}\nLast edit at: ${now}\nDetails:\n${details}\n`;
   fs.writeFileSync(taskPath, template, 'utf8');
 
   // return path to let caller open editor while screen is suspended
@@ -89,7 +89,6 @@ function saveTask(task) {
   parts.push(`Status: ${task.Status}`);
   parts.push(`Labels: ${task.Labels}`);
   parts.push(`Origin: ${task['Origin'] || task.Origin || ''}`);
-  parts.push(`Created at: ${task['Created at'] || task.Created_at}`);
   parts.push(`Last edit at: ${task['Last edit at'] || task.Edit_at}`);
   parts.push('Details:');
   parts.push(task.Details || '');
