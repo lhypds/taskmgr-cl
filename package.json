@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "description": "Simple task management CLI.",
   "bin": {
-    "taskmgr": "cli.js"
+    "taskmgr": "cli.js",
+    "tm": "cli.js"
   },
   "main": "cli.js",
   "scripts": {

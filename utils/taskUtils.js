@@ -66,7 +66,12 @@ function hasSubtask(taskDir) {
 }
 
 function createTask(dir, title = '', labels = '', origin = '', status = 'todo', details = '') {
-  const id = Math.floor(Date.now() / 1000).toString();
+  const now_dt = new Date();
+  const id = now_dt.getFullYear().toString() +
+    String(now_dt.getMonth() + 1).padStart(2, '0') +
+    String(now_dt.getDate()).padStart(2, '0') +
+    String(now_dt.getHours()).padStart(2, '0') +
+    String(now_dt.getMinutes()).padStart(2, '0');
   const taskDir = path.join(dir, id);
   fs.mkdirSync(taskDir);
   const taskPath = path.join(taskDir, TASK_FILE);
