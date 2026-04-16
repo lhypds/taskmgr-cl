@@ -56,7 +56,7 @@ function formatOriginForDisplay(s, width) {
 function renderList(screen, list, tasks, selected) {
   const lines = tasks.map((t, i) => {
     // determine status display: done/pending/todo (with subtask marker)
-    const statusRaw = (t.Status || '').toLowerCase();
+    const statusRaw = (t.status || '').toLowerCase();
     let check;
     if (statusRaw === 'done') {
       check = '[x]';
@@ -70,32 +70,26 @@ function renderList(screen, list, tasks, selected) {
       check = sub ? '[+]' : '[ ]';
     }
 
-    const labels = t.Labels || '';
-    const rawTitle = (t.Title || '').trim();
-    const detailsRaw = t.Details || '';
+    const detailsRaw = t.details || '';
     let title;
-    if (rawTitle) {
-      title = rawTitle;
-    } else {
-      // find the first non-empty row in Details and use that as the title
-      const detailLines = detailsRaw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-      if (detailLines.length > 0) {
-        const firstLine = detailLines[0];
-        const words = firstLine.split(/\s+/).filter(Boolean);
-        if (words.length > 3) {
-          title = words.slice(0, 3).join(' ');
-        } else {
-          title = firstLine;
-        }
+    // find the first non-empty row in details and use that as the title
+    const detailLines = detailsRaw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    if (detailLines.length > 0) {
+      const firstLine = detailLines[0];
+      const words = firstLine.split(/\s+/).filter(Boolean);
+      if (words.length > 3) {
+        title = words.slice(0, 3).join(' ');
       } else {
-        title = '(empty)';
+        title = firstLine;
       }
+    } else {
+      title = '(empty)';
     }
 
     // format origin to exact display width 5, counting CJK chars as width 2
-    const origin = formatOriginForDisplay(t['Origin'] || t.Origin || '', 8);
+    const origin = formatOriginForDisplay(t.origin || '', 8);
 
-    const last = t['Last edit at'] || t.Edit_at || '';
+    const last = t.last_edit || '';
     return `${check}  ${t.id}  ${origin}  ${last}  ${title}`;
   });
   list.setItems(lines);
@@ -173,7 +167,7 @@ function main() {
     // counters for statuses: todo (including empty), done, pending
     let todoCount = 0, doneCount = 0, pendingCount = 0;
     for (const item of ts) {
-      const st = (item.Status || '').toLowerCase();
+      const st = (item.status || '').toLowerCase();
       if (st === 'done') doneCount++;
       else if (st === 'pending') pendingCount++;
       else todoCount++;
@@ -235,8 +229,8 @@ function main() {
     };
 
     tasks.sort((a, b) => {
-      const sa = statusOrder(a.Status);
-      const sb = statusOrder(b.Status);
+      const sa = statusOrder(a.status);
+      const sb = statusOrder(b.status);
       if (sa !== sb) return sa - sb;
       // within same status, sort by id descending (bigger id first)
       const ai = parseInt(a.id, 10) || 0;
@@ -378,7 +372,7 @@ function main() {
     if (!t) return;
 
     // Show only the Details field in the preview (do not show full file)
-    const detailsRaw = (t.Details || '').toString();
+    const detailsRaw = (t.details || '').toString();
 
     // Remove the first and last empty lines, not the middle ones
     const details = (() => {
@@ -438,7 +432,7 @@ function main() {
     if (!t) return;
     const id = t.id;
 
-    if ((t.Status || '').toLowerCase() !== 'pending') {
+    if ((t.status || '').toLowerCase() !== 'pending') {
       markTask(t, 'pending');
     } else {
       markTask(t, 'todo');
@@ -487,7 +481,7 @@ function main() {
     if (!t) return;
     const id = t.id;
 
-    if ((t.Status || '').toLowerCase() !== 'done') {
+    if ((t.status || '').toLowerCase() !== 'done') {
       markTask(t, 'done');
     } else {
       markTask(t, 'todo');

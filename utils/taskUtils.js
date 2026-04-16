@@ -6,21 +6,32 @@ const { formatDate } = require('./dateUtils');
 const TASK_FILE = 'task.txt';
 
 function parseTask(text) {
-  const lines = text.split(/\r?\n/);
-  const out = { Title: '', Status: '', Labels: '', Origin: '', Edit_at: '', Details: '\n' };
-  let detailsMode = false;
-  const details = [];
-  for (const l of lines) {
-    if (detailsMode) { details.push(l); continue; }
-    if (/^Details:\s*$/.test(l)) { detailsMode = true; continue; }
-    const m = l.match(/^([^:]+):\s*(.*)$/);
-    if (m) {
-      const key = m[1].trim();
-      const val = m[2].trim();
-      out[key] = val;
+  const out = { status: '', labels: '', origin: '', last_edit: '', details: '' };
+  const fmMatch = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  if (fmMatch) {
+    const fmLines = fmMatch[1].split(/\r?\n/);
+    for (const l of fmLines) {
+      const m = l.match(/^([^:]+):\s*(.*)$/);
+      if (m) out[m[1].trim()] = m[2].trim();
     }
+    out.details = fmMatch[2].replace(/^\n/, '');
+  } else {
+    // legacy format fallback
+    const lines = text.split(/\r?\n/);
+    let detailsMode = false;
+    const details = [];
+    for (const l of lines) {
+      if (detailsMode) { details.push(l); continue; }
+      if (/^Details:\s*$/.test(l)) { detailsMode = true; continue; }
+      const m = l.match(/^([^:]+):\s*(.*)$/);
+      if (m) {
+        const key = m[1].trim().toLowerCase().replace(/ /g, '_');
+        out[key] = m[2].trim();
+      }
+    }
+    out.details = details.join('\n');
+    if (out['last_edit_at']) { out.last_edit = out['last_edit_at']; }
   }
-  out.Details = details.join('\n');
   return out;
 }
 
@@ -65,7 +76,7 @@ function hasSubtask(taskDir) {
   }
 }
 
-function createTask(dir, title = '', labels = '', origin = '', status = 'todo', details = '') {
+function createTask(dir, labels = '', origin = '', status = 'todo', details = '') {
   const now_dt = new Date();
   const id = now_dt.getFullYear().toString() +
     String(now_dt.getMonth() + 1).padStart(2, '0') +
@@ -76,7 +87,7 @@ function createTask(dir, title = '', labels = '', origin = '', status = 'todo', 
   fs.mkdirSync(taskDir);
   const taskPath = path.join(taskDir, TASK_FILE);
   const now = formatDate(new Date());
-  const template = `Title: ${title}\nStatus: ${status}\nLabels: ${labels}\nOrigin: ${origin}\nLast edit at: ${now}\nDetails:\n${details}\n`;
+  const template = `---\nstatus: ${status}\nlabels: ${labels}\norigin: ${origin}\nlast_edit: ${now}\n---\n\n${details}`;
   fs.writeFileSync(taskPath, template, 'utf8');
 
   // return path to let caller open editor while screen is suspended
@@ -84,21 +95,14 @@ function createTask(dir, title = '', labels = '', origin = '', status = 'todo', 
 }
 
 function saveTask(task) {
-  const parts = [];
-  parts.push(`Title: ${task.Title}`);
-  parts.push(`Status: ${task.Status}`);
-  parts.push(`Labels: ${task.Labels}`);
-  parts.push(`Origin: ${task['Origin'] || task.Origin || ''}`);
-  parts.push(`Last edit at: ${task['Last edit at'] || task.Edit_at}`);
-  parts.push('Details:');
-  parts.push(task.Details || '');
-  fs.writeFileSync(task.path, parts.join('\n'), 'utf8');
+  const fm = `---\nstatus: ${task.status || ''}\nlabels: ${task.labels || ''}\norigin: ${task.origin || ''}\nlast_edit: ${task.last_edit || ''}\n---\n\n${task.details || ''}`;
+  fs.writeFileSync(task.path, fm, 'utf8');
 }
 
 function markTask(task, status) {
   if (!task) return;
-  task.Status = status;
-  task['Last edit at'] = formatDate(new Date());
+  task.status = status;
+  task.last_edit = formatDate(new Date());
   saveTask(task);
 }
 
