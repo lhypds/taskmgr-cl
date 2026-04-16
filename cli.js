@@ -109,12 +109,12 @@ function main() {
   // Check if a path argument was provided
   const args = process.argv.slice(2);
   let cwd = process.cwd();
-  
+
   if (args.length > 0) {
     const providedPath = args[0];
     // Resolve the path (handles relative paths)
     const resolvedPath = path.resolve(providedPath);
-    
+
     // Check if the path exists and is a directory
     try {
       if (fs.existsSync(resolvedPath) && fs.statSync(resolvedPath).isDirectory()) {
@@ -128,7 +128,7 @@ function main() {
       process.exit(1);
     }
   }
-  
+
   const initialRoot = cwd; // do not allow navigating above this directory
 
   // Create the screen
@@ -138,7 +138,7 @@ function main() {
   const header = blessed.box({
     parent: screen,
     top: 0, left: 0, height: 1, width: '100%',
-    content: '     id          origin    edit_at        created_at     task'
+    content: '     id            origin    edit_at        created_at     task'
   });
 
   const selectedStyle = (process.platform === 'win32')
