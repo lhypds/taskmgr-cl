@@ -11,7 +11,7 @@ const {
   hasSubtask
 } = require('./utils/taskUtils');
 const { clearScreen } = require('./utils/screenUtils');
-const { getEditor } = require('./utils/editorUtils');
+const { getEditor, getEditorArgs } = require('./utils/editorUtils');
 
 // load .env
 const path = require('path');
@@ -285,7 +285,7 @@ function main() {
     const { spawnSync } = require('child_process');
     // temporarily leave blessed fullscreen so editor can use the terminal
     try { screen.leave(); } catch (e) { }
-    spawnSync(editor, [taskPath], { stdio: 'inherit' });
+    spawnSync(editor, getEditorArgs(editor, taskPath), { stdio: 'inherit' });
     // re-enter blessed / alternate screen (be defensive about APIs)
     try {
       if (typeof screen.enter === 'function') screen.enter();
@@ -310,7 +310,7 @@ function main() {
       const editor = getEditor();
       const { spawnSync } = require('child_process');
       try { screen.leave(); } catch (e) { }
-      spawnSync(editor, [t.path], { stdio: 'inherit' });
+      spawnSync(editor, getEditorArgs(editor, t.path), { stdio: 'inherit' });
       // re-enter blessed / alternate screen (be defensive about APIs)
       try {
         if (typeof screen.enter === 'function') screen.enter();
@@ -333,7 +333,7 @@ function main() {
       const editor = getEditor();
       const { spawnSync } = require('child_process');
       try { screen.leave(); } catch (e) { }
-      spawnSync(editor, [t.path], { stdio: 'inherit' });
+      spawnSync(editor, getEditorArgs(editor, t.path), { stdio: 'inherit' });
       // re-enter blessed / alternate screen (be defensive about APIs)
       try {
         if (typeof screen.enter === 'function') screen.enter();
