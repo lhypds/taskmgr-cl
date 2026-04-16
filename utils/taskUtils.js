@@ -87,7 +87,7 @@ function createTask(dir, labels = '', origin = '', status = 'todo', details = ''
   fs.mkdirSync(taskDir);
   const taskPath = path.join(taskDir, TASK_FILE);
   const now = formatDate(new Date());
-  const template = `---\nstatus: ${status}\nlabels: ${labels}\norigin: ${origin}\nlast_edit: ${now}\n---\n\n${details}`;
+  const template = `---\nstatus: ${status}\nlabels: ${labels}\norigin: ${origin}\nlast_edit: ${now}\n---\n\n\n${details}`;
   fs.writeFileSync(taskPath, template, 'utf8');
 
   // return path to let caller open editor while screen is suspended
