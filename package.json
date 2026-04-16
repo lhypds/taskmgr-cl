@@ -1,9 +1,9 @@
 {
-  "name": "simple-ai-tasks",
+  "name": "taskmgr",
   "version": "0.1.0",
   "description": "Simple task management CLI.",
   "bin": {
-    "stask": "cli.js"
+    "taskmgr": "cli.js"
   },
   "main": "cli.js",
   "scripts": {

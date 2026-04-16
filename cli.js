@@ -132,7 +132,7 @@ function main() {
   const initialRoot = cwd; // do not allow navigating above this directory
 
   // Create the screen
-  const screen = blessed.screen({ smartCSR: true, title: 'stask', fullUnicode: true, mouse: true });
+  const screen = blessed.screen({ smartCSR: true, title: 'taskmgr', fullUnicode: true, mouse: true });
 
   // Header row (always visible)
   const header = blessed.box({

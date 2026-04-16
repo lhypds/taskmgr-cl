@@ -12,7 +12,7 @@ How It Works
 The application bacically read the folders in current directory, listing all tasks.  
 Each task is a folder with a `task.txt` file inside it.  
 The folder name is the task ID, which is a timestamp in seconds.  
-After start it with `stask`, it will list all tasks in current folder, and user can move between tasks.  
+After start it with `taskmgr`, it will list all tasks in current folder, and user can move between tasks.  
 
 
 Features
@@ -55,7 +55,7 @@ Install globally:
 `npm install -g .`
 
 Uninstall:  
-`npm uninstall -g simple-ai-tasks`
+`npm uninstall -g taskmgr`
 
 
 Setup
@@ -63,13 +63,13 @@ Setup
 
 .env  
 `EDITOR=nvim`  
-Tested available editors: `vim`, `nvim`, `subl`(Sublime Text), `notepad`  
+Available editors: `vim`, `nvim`, `subl`(Sublime Text), `notepad`  
 
 
 Command
 -------
 
-`stask`
+`taskmgr`
 After start it will list all tasks in current folder.  
 If there is no task, it will show a message: "No tasks found."
 
@@ -81,13 +81,13 @@ On macOS, create a `.command` file in the tasks folder, with content:
 
 ```
 #!/bin/bash
-stask current_directory_path
+taskmgr current_directory_path
 ```
 
 Make it executable:  
 `chmod +x yourfile.command`
 
-Then you can double click the file to start `stask`.  
+Then you can double click the file to start `taskmgr`.  
 
 
 Task files
