@@ -5,6 +5,7 @@ const { isCJKChar } = require('./utils/cjkUtils');
 const {
   createTask,
   markTask,
+  updateLastEdit,
   deleteTask,
   renameTaskByFirstLine,
   openTask,
@@ -287,6 +288,7 @@ function main() {
     // temporarily leave blessed fullscreen so editor can use the terminal
     try { screen.leave(); } catch (e) { }
     spawnSync(editor, getEditorArgs(editor, taskPath), { stdio: 'inherit' });
+    updateLastEdit(taskPath);
     renameTaskByFirstLine(taskPath);
     // re-enter blessed / alternate screen (be defensive about APIs)
     try {
@@ -313,6 +315,7 @@ function main() {
       const { spawnSync } = require('child_process');
       try { screen.leave(); } catch (e) { }
       spawnSync(editor, getEditorArgs(editor, t.path), { stdio: 'inherit' });
+      updateLastEdit(t.path);
       renameTaskByFirstLine(t.path);
       // re-enter blessed / alternate screen (be defensive about APIs)
       try {
@@ -337,6 +340,7 @@ function main() {
       const { spawnSync } = require('child_process');
       try { screen.leave(); } catch (e) { }
       spawnSync(editor, getEditorArgs(editor, t.path), { stdio: 'inherit' });
+      updateLastEdit(t.path);
       renameTaskByFirstLine(t.path);
       // re-enter blessed / alternate screen (be defensive about APIs)
       try {
@@ -469,7 +473,7 @@ function main() {
     const tasks = list.tasksData || readTasks(cwd);
     const t = tasks[list.selected];
     if (t) {
-      deleteTask(cwd, t);
+      deleteTask(t);
       refresh(Math.max(0, list.selected - 1));
     }
   });
